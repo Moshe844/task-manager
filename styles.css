@@ -1,0 +1,169 @@
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.nav_logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav_items {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.nav_item {
+    margin-right: 20px;
+}
+
+.nav_link {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.nav_link:hover {
+    color: #ff9900;
+}
+
+.button {
+    background-color: #ff9900;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #e68300;
+}
+
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form_container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form h2 {
+    margin-bottom: 20px;
+}
+
+.input_box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input_box input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.input_box i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    color: #ccc;
+}
+
+.option_field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.checkbox label {
+    margin-left: 5px;
+    color: #666;
+}
+
+.forgot_pw {
+    color: #ff9900;
+    text-decoration: none;
+}
+
+.forgot_pw:hover {
+    text-decoration: underline;
+}
+
+.pw_hide {
+    cursor: pointer;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    max-width: 80%;
+    text-align: center;
+}
+
+#popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.popup-error-text {
+    color: #cc0000;
+    margin: 0;
+    font-size: 14px;
+}

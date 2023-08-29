@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="task.css">
+</head>
+<body>
+
+    <h1>Solutions Team Project</h1>
+    <button id="createTaskBtn" class="create-task-btn">Create Task</button>
+    <button class="signout-btn">Signout</button>
+    <!-- Simple MDL Progress Bar -->
+    <div class="kanban-board">
+        <div class="column" id="todo">
+            <h2>To Do</h2>
+        </div>
+        <div class="column" id="in-progress">
+            <h2>In Progress</h2>
+        </div>
+        <div class="column" id="testing">
+            <h2>Testing</h2>
+        </div>
+        <div class="column" id="done">
+            <h2>Done</h2>
+        </div>
+    </div>
+
+    <div class="task-container" id="taskContainer">
+        <!-- This is where the newly created tasks will be appended -->
+    </div>
+   
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New Task</h2>
+            <p id="username">Creator: <span id="usernameValue"></span></p>
+            <div id="creatorUsernameValue"></div>
+
+            <input type="text" id="taskName" placeholder="Task Name">
+            <textarea id="taskDescription" placeholder="Task Description"></textarea>
+            <div id="formattedDescription" class="formatted-description"></div>
+            <select id="taskStatus">
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="testing">Testing</option>
+                <option value="done">Done</option>
+            </select>
+            <button id="createTask">Create</button>
+            <button id="cancelTask">Cancel</button>
+            <button id="updateButton" style="display: none;">Update</button>
+        </div>
+    </div>
+
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content confirmation-modal">
+            <h2>Confirmation</h2>
+            <p>Are you sure you want to delete this task?</p>
+            <button id="confirmDelete" class="yes">Yes</button>
+            <button id="cancelDelete" class="no">No</button>
+        </div>
+    </div>
+
+    <div id="successModal" class="modals">
+        <div class="modal-contents">
+            <span class="closes">&times;</span>
+            <p id="successMessage"></p>
+        </div>
+    </div>
+    
+    
+<script src="task.js"></script>
+
+
+
+  
+
+</body>
+</html>
