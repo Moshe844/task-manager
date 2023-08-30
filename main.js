@@ -30,10 +30,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // List of allowed usernames and their passwords
         const allowedUsers = [
-            { username: "sfischer", password: "Solutions12!" },
-            { username: "mgrunwald", password: "Solutions12!" },
-            { username: "mekstein", password: "Solutions12!" },
-            { username: "ykaplan", password: "Solutions12!" }
+            { username: "sfischer", password: "Solutions12!", fullName: "Solomon Fischer" },
+            { username: "mgrunwald", password: "Solutions12!", fullName: "Moshe Grunwald"},
+            { username: "mekstein", password: "Solutions12!", fullName: "Moshe Ekstein"},
+            { username: "ykaplan", password: "Solutions12!", fullName: "Yehsua Kaplen"}
         ];
 
         // Check if enteredUsername and enteredPassword match allowed users
@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (matchedUser) {
             // Save the username in localStorage
             localStorage.setItem("enteredUsername", matchedUser.username);
+            localStorage.setItem("fullName", matchedUser.fullName);
             
             // Redirect to task.html
             window.location.href = "task.html";

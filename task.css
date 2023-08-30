@@ -9,6 +9,7 @@ h1 {
     animation: colorChange 5s infinite alternate;
 }
 
+
 @keyframes colorChange {
     0% {
         color: #333;
@@ -17,6 +18,8 @@ h1 {
         color: #e74c3c; /* Change to your desired color */
     }
 }
+
+
 .create-task-btn {
     position: absolute;
     top: 1rem;
@@ -110,12 +113,24 @@ h1 {
 
 /* Style for the task box */
 .task-box {
+    display: flex;
+    flex-direction: column;
     background-color: white;
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
+    position: relative;
+}
+
+.creator {
+    margin-top: auto;
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 4;
+    margin: 5px 0;
 }
 
 .task-name {
@@ -148,9 +163,13 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     max-width: 500px;
     width: 90%;
-    position: relative; /* Add this */
-    left: 50%; /* Add this */
-    transform: translateX(-50%); 
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align items horizontally */
+    position: absolute;
+    top: 50%; /* Position at the vertical center */
+    left: 50%; /* Position at the horizontal center */
+    transform: translate(-50%, -50%); /* Center both horizontally and vertically */
 }
 
 .close {
@@ -162,7 +181,6 @@ h1 {
     cursor: pointer;
 }
 
-/* Style for the task modal title */
 .modal-content h2 {
     margin: 0;
     padding-bottom: 10px;
@@ -171,28 +189,51 @@ h1 {
     font-size: 24px;
 }
 
-/* Style for the task modal input and textarea */
-.modal-content input[type="text"],
-.modal-content textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border: 1px solid #ccc;
+.selectStyle {
+    width: 200px; 
+    height: 40px; 
+    font-size: 16px;
+    color: #333;
+    background-color: #f7f7f7;
     border-radius: 5px;
+    padding: 10px;
+    box-shadow: 1px 1px 2px #999;
+    background: #eee;
 }
 
-/* Style for the task modal select */
+.selectStyle option {
+    display: inline-block;
+    height: 30px;
+    width: 150px;
+    outline: none;
+    color: #74646e;
+    border: 1px solid #111010;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #999;
+  
+  }
+
+  
+  
+
+
+
+
+.modal-content input[type="text"],
+.modal-content textarea,
 .modal-content select {
     width: 100%;
     padding: 10px;
     margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    appearance: none;
     background-color: #f0f0f0;
 }
 
-/* Style for the task modal buttons */
+.modal-content label {
+    margin-top: 10px;
+}
+
 .modal-content button {
     padding: 10px 20px;
     margin-top: 15px;
@@ -201,14 +242,36 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 150px;
     transition: background-color 0.3s;
+    margin-right: 10px;
 }
+
+/* Adjust margin between buttons */
+.modal-content button:last-child {
+    margin-right: 0;
+}
+
 
 .modal-content button:hover {
     background-color: #1976D2;
 }
 
+#createTask {
+    margin-right: 2px;
+}
+
+#updateButton {
+    display: none;
+    margin-right: 2px;
+}
+
+
+
 #taskStatus {
+    cursor: pointer;
+}
+#tags {
     cursor: pointer;
 }
 
@@ -256,6 +319,11 @@ h1 {
 
 .confirmation-modal button:hover {
     background-color: #1976D2;
+}
+
+#cancelDelete {
+    margin-top: 10px;
+    margin-right: 10px;
 }
 .view-button,
 .edit-button,
@@ -328,3 +396,55 @@ h1 {
     color: #13e258;
     font-weight: bold;
 }
+
+#errorDiv {
+    position: relative; /* Ensure proper positioning context */
+   /* Set a higher value to bring it above other elements */
+    color: red;
+    margin-left: 5px;
+    
+   
+}
+
+
+
+
+@media (max-width: 1024px) {
+    body {
+        padding: 10px; 
+    }
+
+    .create-task-btn,
+    .signout-btn {
+        position: static;
+        margin: 10px auto;
+        display: block;
+        width: auto;
+    }
+
+    .kanban-board {
+        display: block;
+    }
+
+    .column {
+        margin: 10px 0;
+    }
+
+    .task-container {
+        display: block;
+    }
+
+    .task-box {
+        margin: 10px 0;
+    }
+
+    .modal-content {
+        width: 90%;
+        max-width: 90%;
+    }
+
+    .modal-content button {
+        margin: 10px 0;
+    }
+}
+

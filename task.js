@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const errorDiv = document.getElementById("errorDiv");
     const createTaskBtn = document.getElementById("createTaskBtn");
     const taskModal = document.getElementById("taskModal");
     const closeModalBtn = document.querySelector(".close");
@@ -13,8 +14,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const successModal = document.getElementById("successModal");
     const successMessage = document.getElementById("successMessage");
     const closeButton = document.querySelector(".closes");
+    const myStatus = document.getElementById("status")
+  
+    const taskCreatorElement = document.getElementById("taskCreator");
+
+    // Get the username from the taskCreator span element
+    const username = taskCreatorElement.textContent;
+
+    // const myStoredUsername = username;
     
-    
+   
     function displaySuccessMessage(message) {
         successMessage.textContent = message;
         successModal.style.display = "block";
@@ -39,10 +48,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const storedUsername = localStorage.getItem('enteredUsername');
+   
 
     if(storedUsername) {
         usernameElement.textContent = storedUsername;
     }
+
+   
 
 
       // Function to convert URLs to clickable links
@@ -70,6 +82,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     closeModalBtn.addEventListener("click", () => {
         taskModal.style.display = "none";
+
+        location.reload()
     });
 
     cancelTaskForm.addEventListener("click", () => {
@@ -84,11 +98,34 @@ document.addEventListener("DOMContentLoaded", () => {
         const description = taskDescription.value;
         const status = taskStatus.value;
 
+        if (!description) {
+            errorDiv.textContent = "Description is required!";
+    
+            
+            setTimeout(() => {
+                errorDiv.textContent = "";
+            }, 3000); 
+    
+            return;
+        }
+
+        if (!name) {
+            errorDiv.textContent = "Task name is required!";
+    
+            
+            setTimeout(() => {
+                errorDiv.textContent = "";
+            }, 3000); 
+    
+            return;
+        }
+
         if (name.trim() !== "") {
             const task = {
                 name: name,
                 description: description,
-                status: status
+                status: status,
+                creator: storedUsername 
             };
             const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
             tasks.push(task);
@@ -147,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
       
+        
 
     function createNewTask(name, description, status) {
        
@@ -156,6 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         taskDescription.value = "";
         taskName.value = "";
+     
+      
 
         const taskNameElement = document.createElement("div");
         taskNameElement.classList.add("task-name");
@@ -165,8 +205,25 @@ document.addEventListener("DOMContentLoaded", () => {
         descriptionElement.classList.add("task-description");
         descriptionElement.innerHTML = "<strong>Details:</strong> " + description;
 
+       
+       
+
+       const creatorElement = document.createElement("p");
+       creatorElement.classList.add("creator");
+       creatorElement.textContent = "Created by: " + username ;
+       console.log(username);
+       creatorElement.style.display = "block"
+
+       
+       
+      
+        
         taskBox.appendChild(taskNameElement);
         taskBox.appendChild(descriptionElement);
+        taskBox.appendChild(creatorElement)
+        
+
+       
 
       
 
@@ -210,6 +267,10 @@ document.addEventListener("DOMContentLoaded", () => {
             
             updateTaskBox(taskBoxToUpdate, newStatus, newDescription);
             taskModal.style.display = "none";
+            taskDescription.value = "";
+            taskName.value = "";
+
+            // location.reload();
         });
 
         
@@ -222,6 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 previousTask.removeChild(taskBox);
             }
 
+           
+
             const viewButton = document.createElement("button");
                 viewButton.innerHTML = "&#128065;";
                 viewButton.classList.add("view-button");
@@ -230,20 +293,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 viewButton.title = "View";
 
                 viewButton.addEventListener("click", () => {
+                    console.log("View button clicked for task:", name);
+                
                     taskModal.style.display = "block";
                     taskName.value = name;
                     taskDescription.value = description;
                     cancelTaskForm.innerHTML = "Ok";
-
-                   
                     taskStatus.remove();
                     createTaskForm.remove();
-                    
+                    myStatus.remove();
+                
                    
-
-                  
-              
-                    
+                
+                    // Rest of your existing code for viewing...
                 });
             
 

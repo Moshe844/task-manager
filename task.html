@@ -34,22 +34,30 @@
     <div id="taskModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
+           
             <h2>Create New Task</h2>
-            <p id="username">Creator: <span id="usernameValue"></span></p>
-            <div id="creatorUsernameValue"></div>
+            <p id="username">Username: <span id="usernameValue"></span></p>
+            
 
             <input type="text" id="taskName" placeholder="Task Name">
             <textarea id="taskDescription" placeholder="Task Description"></textarea>
             <div id="formattedDescription" class="formatted-description"></div>
-            <select id="taskStatus">
+            <p class="creator">Created by: <span id="taskCreator"></span></p>
+            <label id="status" for="taskStatus">STATUS</label>
+            <select class="selectStyle" id="taskStatus">
                 <option value="todo">To Do</option>
                 <option value="in-progress">In Progress</option>
                 <option value="testing">Testing</option>
                 <option value="done">Done</option>
             </select>
+            
+            <div id="errorDiv"></div>
+            
+            
             <button id="createTask">Create</button>
+            <button id="updateButton" >Update</button>
             <button id="cancelTask">Cancel</button>
-            <button id="updateButton" style="display: none;">Update</button>
+            
         </div>
     </div>
 
@@ -68,6 +76,10 @@
             <p id="successMessage"></p>
         </div>
     </div>
+
+    
+    
+   
     
     
 <script src="task.js"></script>
