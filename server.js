@@ -5,6 +5,11 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const allowedUsers = [
+    { username: "sfischer", fullName: "Solomon Fischer" },
+    { username: "mgrunwald", fullName: "Moshe Grunwald" },
+    { username: "mekstein", fullName: "Moshe Ekstein" }
+  ];
 // Connect to MongoDB
 mongoose.connect('mongodb://0.0.0.0:27017/kanban', {
   useNewUrlParser: true,
@@ -17,6 +22,8 @@ const Task = mongoose.model('Task', {
   status: String,
   creator: String
 });
+
+
 
 app.use(express.json());
 
@@ -104,6 +111,20 @@ app.get('/task', async (req, res) => {
       }
     });
   });
+
+  app.post('/login', (req, res) => {
+    const { username } = req.body;
+  
+    const matchedUser = allowedUsers.find(user => user.username === username);
+  
+    if (matchedUser) {
+      // Return the username and full name if it's allowed
+      res.status(200).json({ username: matchedUser.username, fullName: matchedUser.fullName });
+    } else {
+      res.status(401).json({ error: 'Invalid username' });
+    }
+  });
+  
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

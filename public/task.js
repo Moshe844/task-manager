@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButton = document.querySelector(".closes");
     const myStatus = document.getElementById("status")
   
-    const taskCreatorElement = document.getElementById("taskCreator");
+    // const taskCreatorElement = document.getElementById("taskCreator");
 
-    const username = taskCreatorElement.textContent;
+    // const username = taskCreatorElement.textContent;
 
     // const myStoredUsername = username;
    
@@ -42,17 +42,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     
 
-    const storedStatus = localStorage.getItem('taskStatus');
-    if (storedStatus) {
-        taskStatus.value = storedStatus;
-    }
+    // const storedStatus = localStorage.getItem('taskStatus');
+    // if (storedStatus) {
+    //     console.log(storedStatus);
+    //     taskStatus.value = storedStatus;
+    // }
 
-    const storedUsername = localStorage.getItem('enteredUsername');
-   
-
-    if(storedUsername) {
-        usernameElement.textContent = storedUsername;
-    }
+    function getQueryParam(parameterName) {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get(parameterName);
+      }
+      
+      // Get the username from the query parameter
+      const username = getQueryParam('username');
+      const fullName = getQueryParam('fullName');
+      
+      // Update the usernameValue element with the retrieved username
+      const usernameValue = document.getElementById('usernameValue');
+      if (username) {
+        usernameValue.textContent = username;
+      } else {
+        usernameValue.textContent = 'Unknown';
+      }
+      
+      // Display the full name in the "creator" paragraph
+      const taskCreator = document.getElementById('taskCreator');
+      if (fullName) {
+        taskCreator.textContent = "Created by: " + fullName;
+      } else {
+        taskCreator.textContent = 'Created by: Unknown';
+      }
 
    
 
@@ -125,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name: name,
         description: description,
         status: status,
-        creator: storedUsername 
+        // creator: storedUsername 
       };
   
       try {
@@ -177,14 +197,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
       function updateTaskInUI(taskName, newStatus, newDescription) {
         const taskBoxToUpdate = document.querySelector(`[data-name="${taskName}"]`);
-    
+            
         if (taskBoxToUpdate) {
             const taskDescriptionElement = taskBoxToUpdate.querySelector(".task-description");
-            const taskStatusElement = taskBoxToUpdate.querySelector(".task-status");
-    
-            if (taskDescriptionElement && taskStatusElement) {
+            // const taskStatusElement = taskBoxToUpdate.querySelector(".task-status");
+            console.log("Status:", newStatus);
+            const column = document.getElementById(newStatus);
+            if (column) {
+                column.appendChild(taskBoxToUpdate);
+                
+            } else {
+                console.error("Invalid status:", newStatus);
+            }
+            if (taskDescriptionElement) {
+                
                 taskDescriptionElement.innerHTML = `<strong>Details:</strong> ${newDescription}`;
-                taskStatusElement.textContent = newStatus;
+              
             }
         }
     }
@@ -204,8 +232,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     
             if (response.ok) {
-                // Update the task in the UI
-                updateTaskInUI(taskName, newStatus, newDescription);
+                
+                var {description, name, status} = await response.json();
+                console.log(response.body);
+                console.log(description, name, status);
+                updateTaskInUI(name, status, description);
     
                 taskModal.style.display = "none";
                 displaySuccessMessage("Task updated successfully");
@@ -217,8 +248,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
-
-    function createNewTask(name, description, status) {
+    
+    function createNewTask(name, description, status, fullName) {
        
         const taskBox = document.createElement("div");
         taskBox.classList.add("task-box");
@@ -242,8 +273,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
        const creatorElement = document.createElement("p");
        creatorElement.classList.add("creator");
-       creatorElement.textContent = "Created by: " + username ;
-       console.log(username);
+       creatorElement.textContent = "Created by: " + fullName ;
+       console.log(fullName);
        creatorElement.style.display = "block"
 
        
@@ -295,13 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const newStatus = taskStatus.value;
             const newDescription = taskDescription.value;
         
-            // Check if taskBoxToUpdate is not null
+           
             if (taskBoxToUpdate) {
-                // Replace 'taskNameToUpdate' with the actual task name you want to update
+              
                 const taskNameToUpdate = taskBoxToUpdate.getAttribute("data-name");
         
                 if (taskNameToUpdate) {
                     updateTaskOnServer(taskNameToUpdate, newStatus, newDescription);
+                    taskName.value = "";
+                    taskDescription.value = "";
                 }
             } else {
                 console.error("taskBoxToUpdate is null. Make sure the 'Edit Task' button was clicked before updating.");
