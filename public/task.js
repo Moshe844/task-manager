@@ -11,11 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskDescription = document.getElementById("taskDescription");
     const taskStatus = document.getElementById("taskStatus");
     const signoutButton = document.querySelector(".signout-btn");
-    const usernameElement = document.getElementById("usernameValue");
+    // const usernameElement = document.getElementById("usernameValue");
     const successModal = document.getElementById("successModal");
     const successMessage = document.getElementById("successMessage");
     const closeButton = document.querySelector(".closes");
     const myStatus = document.getElementById("status")
+    // const modal = document.getElementById("myModal");
+    // const closingModalBtn = document.querySelector(".closing");
+    // const confirmModal = document.getElementById("confirmEdit")
   
     // const taskCreatorElement = document.getElementById("taskCreator");
 
@@ -42,11 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     
 
-    // const storedStatus = localStorage.getItem('taskStatus');
-    // if (storedStatus) {
-    //     console.log(storedStatus);
-    //     taskStatus.value = storedStatus;
-    // }
 
     function getQueryParam(parameterName) {
         const queryString = window.location.search;
@@ -56,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Get the username from the query parameter
       const username = getQueryParam('username');
-      const fullName = getQueryParam('fullName');
+      const fullNameParams = getQueryParam('fullName');
       
       // Update the usernameValue element with the retrieved username
       const usernameValue = document.getElementById('usernameValue');
@@ -68,12 +66,18 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Display the full name in the "creator" paragraph
       const taskCreator = document.getElementById('taskCreator');
-      if (fullName) {
-        taskCreator.textContent = "Created by: " + fullName;
+      if (fullNameParams) {
+        taskCreator.textContent = "Created by: " + fullNameParams;
       } else {
         taskCreator.textContent = 'Created by: Unknown';
       }
 
+      const taskEditor = document.getElementById("taskEditor");
+      if(fullNameParams){
+        taskEditor.textContent = "Edited by: " + fullNameParams;
+      }else {
+        taskEditor.textContent = 'Edited by: Unknown';
+      }
    
 
 
@@ -113,6 +117,15 @@ document.addEventListener("DOMContentLoaded", () => {
         
     });
 
+    // closingModalBtn.addEventListener('click', () => {
+    //     modal.style.display = 'none'; // Hide the modal
+    // });
+
+    // confirmModal.addEventListener('click', () => {
+    //     modal.style.display = 'none'; // Hide the modal
+    //     // Proceed with editing logic here
+    // });
+
     createTaskForm.addEventListener("click", async () => {
         const name = taskName.value;
         const description = taskDescription.value;
@@ -145,7 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
         name: name,
         description: description,
         status: status,
-        // creator: storedUsername 
+        username: username,
+        fullName: fullNameParams,
+        // editor: fullNameParams
       };
   
       try {
@@ -162,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
             taskModal.style.display = "none";
             displaySuccessMessage("Task created successfully")
             console.log("Created task", await createdTask);
-            createNewTask(createdTask.task.name, createdTask.task.description, createdTask.task.status); // Add the new task to the UI
+           
+            createNewTask(createdTask.task.name, createdTask.task.description, createdTask.task.status, createdTask.task.fullName, createdTask.task.editor); // Add the new task to the UI
         } else {
           // Handle error
         }
@@ -178,9 +194,11 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const response = await fetch(`${API_URL}/tasks`);
           if (response.ok) {
+            
             const tasks = await response.json();
             tasks.forEach(task => {
-              createNewTask(task.name, task.description, task.status);
+              createNewTask(task.name, task.description, task.status, task.fullName, task.editor);
+              
             });
           } else {
             // Handle error
@@ -195,13 +213,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
        
 
-      function updateTaskInUI(taskName, newStatus, newDescription) {
+      function updateTaskInUI(taskName, newStatus, newDescription, editor) {
+        // console.log(editor);
         const taskBoxToUpdate = document.querySelector(`[data-name="${taskName}"]`);
             
         if (taskBoxToUpdate) {
             const taskDescriptionElement = taskBoxToUpdate.querySelector(".task-description");
+            const taskEditorElement = taskBoxToUpdate.querySelector(".editor");
             // const taskStatusElement = taskBoxToUpdate.querySelector(".task-status");
-            console.log("Status:", newStatus);
+            // console.log("Status:", newStatus);
             const column = document.getElementById(newStatus);
             if (column) {
                 column.appendChild(taskBoxToUpdate);
@@ -214,11 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 taskDescriptionElement.innerHTML = `<strong>Details:</strong> ${newDescription}`;
               
             }
+
+            if(taskEditorElement) {
+                taskEditorElement.textContent = "Edited by: " + editor ;
+            }
         }
     }
     
     // Function to update a task on the server
-    async function updateTaskOnServer(taskName, newStatus, newDescription) {
+    async function updateTaskOnServer(taskName, newStatus, newDescription, editor, editedDate) {
         try {
             const response = await fetch(`/tasks/${taskName}`, {
                 method: 'PUT',
@@ -228,16 +252,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({
                     status: newStatus,
                     description: newDescription,
+                    editor: fullNameParams,
+                    editedDate: editedDate
+                    
                 }),
             });
     
             if (response.ok) {
                 
-                var {description, name, status} = await response.json();
-                console.log(response.body);
-                console.log(description, name, status);
-                updateTaskInUI(name, status, description);
-    
+                var {description, name, status, editor} = await response.json();
+                // console.log(response.body);
+                console.log(description, name, status, editor, editedDate);
+                updateTaskInUI(name, status, description, editor, editedDate);
+                location.reload()
                 taskModal.style.display = "none";
                 displaySuccessMessage("Task updated successfully");
             } else {
@@ -247,10 +274,17 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(error);
         }
     }
+
+    function formatDate(date) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    }
     
     
-    function createNewTask(name, description, status, fullName) {
-       
+    function createNewTask(name, description, status, fullName, editor) {
+        const formattedDate = formatDate(new Date()); 
+        
+       console.log(editor);
         const taskBox = document.createElement("div");
         taskBox.classList.add("task-box");
         taskBox.setAttribute("data-name", name);
@@ -274,21 +308,33 @@ document.addEventListener("DOMContentLoaded", () => {
        const creatorElement = document.createElement("p");
        creatorElement.classList.add("creator");
        creatorElement.textContent = "Created by: " + fullName ;
-       console.log(fullName);
+      
        creatorElement.style.display = "block"
 
        
-       
+    //    const editedByElement = document.createElement("p");
+    //     editedByElement.classList.add("editor");
+    //     editedByElement.textContent = "Edited by: " + fullNameParams;
+    //     console.log(fullName);
+    //     editedByElement.style.display = "none"
       
         
         taskBox.appendChild(taskNameElement);
         taskBox.appendChild(descriptionElement);
         taskBox.appendChild(creatorElement)
+        // taskBox.appendChild(editedByElement)
         
-        console.log("Created task:", name, description, status, username);
        
+        if (editor !== null) {
+            console.log(editor, fullName);
+            const editedByElement = document.createElement("p");
+            editedByElement.classList.add("editor");
+            editedByElement.textContent = "Edited by: " + editor + " on " + formattedDate ;
+            editedByElement.style.display = "block"
+            taskBox.appendChild(editedByElement);
+          }
 
-      
+        //   console.log("Created task:", name, description, status, username);
 
 
         const buttonContainer = document.createElement("div");
@@ -304,27 +350,42 @@ document.addEventListener("DOMContentLoaded", () => {
        
         let taskBoxToUpdate = null;
         editButton.addEventListener("click", () => {
-            
-                taskBoxToUpdate = taskBox;
-
-          
-                taskModal.style.display = "block";
-                taskName.value = name;
-                taskDescription.value = description;
-                taskStatus.value = status;
-                buttonUpdate.style.display = "block";
-                createTaskForm.style.display = "none";
-                
-
-             
-
-                
-           
+            taskBoxToUpdate = taskBox;
+                        taskModal.style.display = "block";
+                        taskName.value = name;
+                        taskDescription.value = description;
+                        taskStatus.value = status;
+                        buttonUpdate.style.display = "block";
+                        createTaskForm.style.display = "none";
+            if (fullNameParams !== fullName) {
+                 taskModal.style.display = "none"
+                Swal.fire({
+                    title: "Confirmation",
+                    text: "You are about to edit someone else's task. Are you sure?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Yes, Proceed",
+                    cancelButtonText: "Cancel",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User clicked "Yes, Proceed," proceed with the edit
+                        taskBoxToUpdate = taskBox;
+                        taskModal.style.display = "block";
+                        taskName.value = name;
+                        taskDescription.value = description;
+                        taskStatus.value = status;
+                        buttonUpdate.style.display = "block";
+                        createTaskForm.style.display = "none";
+                    } else {
+                        taskModal.style.display = "none"
+                    }
+                });
+            }
         });
-        
         updateButton.addEventListener("click", () => {
             const newStatus = taskStatus.value;
             const newDescription = taskDescription.value;
+           
         
            
             if (taskBoxToUpdate) {
@@ -332,9 +393,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const taskNameToUpdate = taskBoxToUpdate.getAttribute("data-name");
         
                 if (taskNameToUpdate) {
-                    updateTaskOnServer(taskNameToUpdate, newStatus, newDescription);
+                    updateTaskOnServer(taskNameToUpdate, newStatus, newDescription, fullNameParams);
                     taskName.value = "";
                     taskDescription.value = "";
+
+                    const editedByElement = taskBoxToUpdate.querySelector('.editor');
+            if (editedByElement) {
+                const now = new Date();
+                const formattedDate = formatDate(now);
+                editedByElement.style.display = "block";
+                editedByElement.textContent = "Edited by " + fullNameParams + " on " + formattedDate;
+            }
                 }
             } else {
                 console.error("taskBoxToUpdate is null. Make sure the 'Edit Task' button was clicked before updating.");
@@ -381,6 +450,8 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteButton.classList.add("delete-button");
         deleteButton.title ="Delete Task";
         deleteButton.addEventListener("click", () => {
+
+            
             const confirmationModal = document.getElementById("confirmationModal");
             confirmationModal.style.display = "block";
             taskDescription.value = "";
@@ -429,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
 
-        console.log("Status:", status);
+        // console.log("Status:", status);
         const column = document.getElementById(status);
         if (column) {
             column.appendChild(taskBox);

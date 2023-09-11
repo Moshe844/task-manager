@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
       
         // Get the entered username
         const enteredUsername = usernameInput.value;
-      
+        
         // Send a POST request to the login endpoint on the server
         fetch('/login', {
           method: 'POST',
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
           .then(data => {
             if (data.username) {
               // Redirect to task.html and pass the username as a query parameter
-              window.location.href = `task?username=${data.username}`;
+              window.location.href = `task?username=${data.username}&fullName=${data.fullName}`;
             } else {
               popupErrorMessage.textContent = "Invalid username. Please enter valid credentials.";
               popup.style.display = "flex";

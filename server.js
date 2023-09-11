@@ -20,7 +20,10 @@ const Task = mongoose.model('Task', {
   name: String,
   description: String,
   status: String,
-  creator: String
+  username: String,
+  fullName: String,
+  editor: String,
+  editedDate: String
 });
 
 
@@ -31,9 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Create a new task
 app.post('/tasks', async (req, res) => {
-    const { name, description, status, creator } = req.body;
+    const { name, description, status, username, fullName } = req.body;
     try {
-      const task = new Task({ name, description, status, creator });
+      const task = new Task({ name, description, status, username, fullName , editor:null});
+      console.log(task);
       await task.save();
       res.status(201).json({ task }); // Include taskId in the response
     } catch (error) {
@@ -66,13 +70,14 @@ app.delete('/tasks/:name', async (req, res) => {
 
 app.put('/tasks/:name', async (req, res) => {
     const taskName = req.params.name;
-    const { status, description } = req.body;
+    const { status, description, editor } = req.body;
   
     try {
       // Find the task by name and update its status and description
       const updatedTask = await Task.findOneAndUpdate(
         { name: taskName },
-        { status, description },
+        { status, description, editor },
+        
         { new: true } // Return the updated task
       );
   

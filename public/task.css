@@ -117,7 +117,7 @@ h1 {
     flex-direction: column;
     background-color: white;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 15px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -125,21 +125,35 @@ h1 {
 }
 
 .creator {
-    margin-top: auto;
+    position: absolute;
+    bottom: 10px; /* Adjust this value to add space between Creator and Editor */
+    left: 4px; /* Adjust left position if needed */
+    margin: 5px 0;
     display: none;
+    text-decoration: underline;
+    padding: 5px;
+ /* Add a light background color */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    font-style: italic; /* Adjust font style if needed */
+}
+
+.editor {
     position: absolute;
     bottom: 0;
-    left: 4;
+    left: 4px; /* Adjust left position if needed */
     margin: 5px 0;
+    display: none;
+    font-size: 10px;
 }
 
 .task-name {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .task-description {
     color: #666;
+    margin-bottom: 10px;
 }
 
 /* Style for the task modal */
@@ -405,6 +419,40 @@ h1 {
     
    
 }
+
+
+.modaled {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-contented {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .closing {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close:hover {
+    color: black;
+  }
 
 
 
