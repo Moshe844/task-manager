@@ -11,10 +11,10 @@ const allowedUsers = [
     { username: "mekstein", fullName: "Moshe Ekstein" }
   ];
 // Connect to MongoDB
-mongoose.connect('mongodb://0.0.0.0:27017/kanban', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  });
 
 const Task = mongoose.model('Task', {
   name: String,
@@ -70,13 +70,13 @@ app.delete('/tasks/:name', async (req, res) => {
 
 app.put('/tasks/:name', async (req, res) => {
     const taskName = req.params.name;
-    const { status, description, editor } = req.body;
+    const { status, description, editor,editedDate } = req.body;
   
     try {
       // Find the task by name and update its status and description
       const updatedTask = await Task.findOneAndUpdate(
         { name: taskName },
-        { status, description, editor },
+        { status, description, editor, editedDate },
         
         { new: true } // Return the updated task
       );
