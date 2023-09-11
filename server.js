@@ -11,10 +11,10 @@ const allowedUsers = [
     { username: "mekstein", fullName: "Moshe Ekstein" }
   ];
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+mongoose.connect('mongodb://0.0.0.0:27017/kanban', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 const Task = mongoose.model('Task', {
   name: String,
@@ -25,6 +25,18 @@ const Task = mongoose.model('Task', {
   editor: String,
   editedDate: String
 });
+
+// async function findTasks() {
+//     try {
+//       const tasks = await Task.find({ username: "sfischer" 
+//     });
+//       console.log(`Found ${tasks.length} tasks for sfischer`);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+  
+//   findTasks();
 
 
 
