@@ -5,4 +5,8 @@
     "mongoose": "^7.5.0",
     "pg-promise": "^11.5.4"
   }
+  "scripts": {
+  "start": "node server.js"
+}
+
 }
