@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:4000';
+const API_URL = "https://task-manager-solution.onrender.com";
 document.addEventListener("DOMContentLoaded", () => {
     const errorDiv = document.getElementById("errorDiv");
     const createTaskBtn = document.getElementById("createTaskBtn");
