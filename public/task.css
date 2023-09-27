@@ -35,6 +35,104 @@ h1 {
     transition: background-color 0.3s;
 }
 
+#url {
+    text-align: center;
+}
+.track-pr-btn {
+    position: absolute;
+    top: 1rem;
+    right: 400px;
+    background-color: #3785c5;
+    width: 150px;
+    height: 40px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.track-pr-btn:hover {
+    background-color: #1976D2;
+}
+
+.ourmodal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+  }
+  
+  .ourmodal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    height: 50%;
+  }
+  
+  .closebtn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .closebtn:hover,
+  .closebtn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .url-input {
+    margin-bottom: 10px;
+  }
+  
+  .url-input label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .url-input {
+    width: 80%;
+    height: 300px;
+    border: 1px solid #ccc; /* Add a border for a box-like appearance */
+    padding: 8px;
+    margin: auto;
+    caret-color: black; /* or your preferred color */
+    line-height: 1.6; /* Adjust line height for better visibility */
+    font-size: 16px; /* Set font size */
+    
+}
+
+.url-input a {
+    cursor: pointer;
+}
+
+
+  .modal-buttons {
+    display: flex;
+    justify-content: center;
+    
+}
+  
+  .modal-buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    
+  }
+
 .signout-btn {
     background-color: #3b3e41;
     color: white;
@@ -154,6 +252,20 @@ h1 {
 .task-description {
     color: #666;
     margin-bottom: 10px;
+}
+
+.formatted-description {
+    margin-top: 10px;
+}
+
+#formattingOptions {
+    margin-top: 10px;
+}
+
+#italic {
+    background-color: transparent;
+    color: black;
+   font-size: 20px;
 }
 
 /* Style for the task modal */
@@ -289,6 +401,8 @@ h1 {
     cursor: pointer;
 }
 
+
+
 .confirmation-modal {
     background-color: white;
     padding: 20px;
@@ -364,8 +478,10 @@ h1 {
 }
 
 
-.formatted-description {
-    margin-top: 10px;
+
+
+button {
+    margin-right: 5px;
 }
 
 .modals {
@@ -455,7 +571,9 @@ h1 {
   }
 
 
-
+#taskDescription {
+    height: 80px;
+}
 
 @media (max-width: 1024px) {
     body {

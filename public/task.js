@@ -16,17 +16,94 @@ document.addEventListener("DOMContentLoaded", () => {
     const successMessage = document.getElementById("successMessage");
     const closeButton = document.querySelector(".closes");
     const myStatus = document.getElementById("status")
-    // const modal = document.getElementById("myModal");
-    // const closingModalBtn = document.querySelector(".closing");
-    // const confirmModal = document.getElementById("confirmEdit")
-  
-    // const taskCreatorElement = document.getElementById("taskCreator");
+    const trackPrButton = document.getElementById("trackPrRequests");
+    const modal = document.getElementById("ourModal");
+    const ourCloseButton = document.getElementsByClassName("closebtn")[0];
+    const cancelButton = document.getElementById("cancelBtn");
 
-    // const username = taskCreatorElement.textContent;
+    function buildHTML(urls) {
+        const urlsDiv = document.createElement("div");
+        const urlsContent = urls
+          .map((url) => {
+            if (url.trim().startsWith("http")) {
+              return `<a href="${url.trim()}" target="_blank">${url.trim()}</a><br>`;
+            } else {
+              return `${url}<br>`;
+            }
+          })
+          .join("");
+        urlsDiv.innerHTML = urlsContent;
+        document.querySelector(".url-input").prepend(urlsDiv); // I am prepending to body just to show you that you need to inject the tags in the html. You put it on your desired place.
+      }
+      const loadURLs = async () => {
+        try {
+          const response = await fetch(`${API_URL}/urls`);
+          const urls = await response.json();
+          console.log(urls);
+          // You can create a function to build the html with the urls info and invoke it.
+          buildHTML(urls);
+        } catch (err) {
+          console.error(`Failed to load URLs. ${err}`);
+        }
+      };
+      loadURLs();
+      document.getElementById("saveBtn").addEventListener("click", function () {
+        const urlInput = document.querySelector(".url-input");
+        const urls = urlInput.innerText.split("\n").filter(Boolean);
+        const formattedUrls = urls.map((url) => {
+          if (url.trim().startsWith("http")) {
+            return `<a href="${url.trim()}" target="_blank">${url.trim()}</a>`;
+          } else {
+            return url;
+          }
+        });
+        urlInput.innerHTML = formattedUrls.join("<br>");
+        modal.style.display = "none";
+        const links = urlInput.querySelectorAll("a");
+        links.forEach((link) => {
+          link.addEventListener("click", function (event) {
+            event.preventDefault();
+            window.open(this.href, "_blank");
+          });
+        });
+        // Send the URLs to the server
+        fetch("http://localhost:4000/urls", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `url=${encodeURIComponent(urls.join("\n"))}`,
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            loadURLs();
+            return response.text(); // This will be 'URL saved successfully!'
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+    
+  trackPrButton.onclick = function() {
+    modal.style.display = "block";
+  }
 
-    // const myStoredUsername = username;
+  ourCloseButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  cancelButton.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
    
-   
+ 
     function displaySuccessMessage(message) {
         successMessage.textContent = message;
         successModal.style.display = "block";
@@ -513,6 +590,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
    
 });
+
         
   
 

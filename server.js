@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 4000;
 
 const allowedUsers = [
@@ -23,8 +25,18 @@ const Task = mongoose.model('Task', {
   username: String,
   fullName: String,
   editor: String,
-  editedDate: String
+  editedDate: String,
+//   urls: [String]
+  
 });
+
+const urlSchema = new mongoose.Schema({
+    url: String,
+});
+
+// Create a model based on the schema
+const Url = mongoose.model('Url', urlSchema);
+
 
 // async function findTasks() {
 //     try {
@@ -141,7 +153,42 @@ app.get('/task', async (req, res) => {
       res.status(401).json({ error: 'Invalid username' });
     }
   });
-  
+
+//   const dataFilePath = path.join(__dirname, 'data', 'urls.json');
+
+// // Load existing data or create an empty array
+// let urls = [];
+// if (fs.existsSync(dataFilePath)) {
+//   urls = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+// } else {
+//   fs.writeFileSync(dataFilePath, JSON.stringify(urls));
+// }
+
+app.post("/urls", async (req, res) => {
+  console.log("recieved URLs", req.body);
+  const { url } = req.body;
+  try {
+    if (url && url.trim() !== "") {
+      const newUrl = new Url({ url });
+      await newUrl.save();
+      res.status(201).json({ newUrl });
+    }
+  } catch (err) {
+    res.status(400).send(`Failed saving urls. ${err}`);
+  }
+});
+
+// Retrieve URLs from the database
+app.get("/urls", async (req, res) => {
+  try {
+    const urls = await Url.find();
+    console.log("get", urls);
+    res.json(urls.map((url) => url.url));
+  } catch (err) {
+    res.status(500).send("Error retrieving URLs from the database");
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

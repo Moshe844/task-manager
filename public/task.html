@@ -9,6 +9,19 @@
 <body>
 
     <h1>Solutions Team Project</h1>
+    <button id="trackPrRequests" class="track-pr-btn">Track PR requests</button>
+    <div id="ourModal" class="ourmodal">
+        <div class="ourmodal-content">
+          <span class="closebtn">&times;</span>
+          <h2 id="url">Enter URLs</h2>
+          <div class="url-input" contenteditable="true"></div> <!-- Use a contenteditable div -->
+          <div class="modal-buttons">
+            <button id="cancelBtn">Cancel</button>
+            <button id="saveBtn">Save</button>
+          </div>
+        </div>
+      </div>
+    
     <button id="createTaskBtn" class="create-task-btn">Create Task</button>
     <button class="signout-btn">Signout</button>
     <!-- Simple MDL Progress Bar -->
@@ -41,6 +54,7 @@
 
             <input type="text" id="taskName" placeholder="Task Name">
             <textarea id="taskDescription" placeholder="Task Description"></textarea>
+        
             <div id="formattedDescription" class="formatted-description"></div>
             <p class="creator">Created by: <span id="taskCreator"></span></p>
             <p class="editor">Edited by: <span id="taskEditor"></span></p>
