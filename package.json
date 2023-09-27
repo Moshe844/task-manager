@@ -5,5 +5,13 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
     "pg-promise": "^11.5.4"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+  "node": ">=14.20.1"
 }
+
+}
+
